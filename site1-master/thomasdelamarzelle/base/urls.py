@@ -22,6 +22,7 @@ urlpatterns = [
 
     path('', views.Index.as_view(), name='index'),
     path('base', views.Base.as_view(), name='base'),
-    path('store', views.store, name='store')
+    path('store', views.store, name='store'),
+    path('student/<str:pk_test>/', views.student, name='student'),
 
 ]

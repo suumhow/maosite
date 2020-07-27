@@ -20,3 +20,8 @@ def store(request):
     total_products_sample_pack = products.filter(category='Sample Pack').count()
     context = {'products': products, 'total_products':total_products,'total_products_sample_pack': total_products_sample_pack}
     return render(request, 'store.html', context)
+
+def student(request, pk_test):
+    student = Student.objects.get(id=pk_test)
+    context = {'student': student}
+    return render(request, 'student.html', context)
