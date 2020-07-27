@@ -13,11 +13,13 @@
 
                         </p>
                           <hr>
-                          <h5 class="card-title">Primary card title</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.
-                        fgdgfdgdgdhf
-                         sdbf hsdbf hsdbfhdsfb jhsdfg jhdsbfhsdf hsdbhjsdbf hsbdhbsd bsf hsdbhbs dghgbksbg k b,j bkdsb ksdbf kdsnk gjd
-                         sdb hjsbdf  bskjhd bksdfb hj bksdbfb kj bkjh bkds bksd bdskf bksfdbkhsdf bksdb kdsb ksdfbksfb bk bhdskfbsbf kb kjsd</p>
+                          <h5 class="card-title">My {{total_orders}} past orders</h5>
+                        <p class="card-text">I have ordered :
+                            {% for i in orders %}
+                                {{i.product}}
+
+                            {% endfor %}
+                        </p>
                       </div>
                     </div>
                 </div>

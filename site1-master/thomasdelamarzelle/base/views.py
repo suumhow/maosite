@@ -23,5 +23,7 @@ def store(request):
 
 def student(request, pk_test):
     student = Student.objects.get(id=pk_test)
-    context = {'student': student}
+    orders = student.order_set.all()
+    total_orders = orders.count()
+    context = {'student': student, 'orders': orders, 'total_orders': total_orders}
     return render(request, 'student.html', context)

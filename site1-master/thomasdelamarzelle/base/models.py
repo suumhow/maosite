@@ -39,6 +39,8 @@ class Product(models.Model):
     category = models.CharField(max_length=240, null=True, choices=CATEGORY)
     description = models.CharField(max_length=240, null=True)
     tags = models.ManyToManyField(Tags)
+    def __str__(self):
+        return self.name
 
 
 
