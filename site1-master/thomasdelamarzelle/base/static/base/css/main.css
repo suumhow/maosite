@@ -1,0 +1,57 @@
+
+body {
+        background: linear-gradient(90deg, hsla(255, 50%, 94%, 0.9) 0%, hsla(110, 92%, 95%, 1) 100%);
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        background-size: cover;
+        background-attachment: fixed;
+
+}
+
+.border-mao {
+border-color: hsla(255, 50%, 94%, 1)!important;
+}
+.textcenter {
+text-align:center;
+}
+.pt {
+       padding-top:15px;
+}
+.main {
+       /* background: hsla(235, 60%, 96%, 1); */
+        border: solid 1 px;
+        padding-top: 5px;
+        background-image: url("../media/tabledemix.jpg")!important ;
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        background-size: cover;
+        background-attachment: fixed;
+        z-index:0;
+      /*  opacity: 0.33; */
+
+}
+
+.row {
+padding-bottom:5px;
+background-image: url("{% static 'base/media/tabledemix.jpg'%}")!important;
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        background-size: cover;
+        background-attachment: fixed;
+}
+
+.card {
+opacity: 0.9;
+}
+.clair {
+z-index:1;
+opacity:1!important;
+}
+.navcustom {
+padding-top:5px;
+background: linear-gradient(0deg, hsla(255, 50%, 94%, 0.9) 0%, hsla(110, 92%, 95%, 1) 100%)!important;
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        background-size: cover;
+        background-attachment: fixed;
+}
