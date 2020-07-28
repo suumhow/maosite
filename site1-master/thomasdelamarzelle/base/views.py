@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
 from .models import *
-from .forms import StudentForm
+from .forms import ProductForm
 from django.forms import inlineformset_factory
 from .filters import ProductFilter
+from django.contrib.auth.forms import UserCreationForm
 
 
 class Index(TemplateView):
@@ -17,23 +18,30 @@ class Store(TemplateView):
 
     template_name = "store.html"
 
-def register(request):
-    form = StudentForm()
+def product(request):
+    form = ProductForm()
     context = {'form': form}
     if request.method == 'POST' :
         print('Printing post:', request.POST)
-        form = StudentForm(request.POST)
+        form = ProductForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('store')
-    return render(request, 'register.html', context)
+    return render(request, 'store.html', context)
 
 def login(request):
-    #form = StudentForm()
+
+    form = UserCreationForm()
     context = {'form': form}
 
     return render(request, 'login.html', context)
 
+
+def register(request):
+    form = UserCreationForm()
+    context = {'form': form}
+
+    return render(request, 'login.html', context)
 
 def store(request):
     products = Product.objects.all()
