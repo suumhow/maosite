@@ -2,17 +2,23 @@
 {% load static %}
 
 {% block content %}
-<div class="row">
-                <div class="col-sm-12">
+<div class="row" id="register-container">
+                <div class="col-sm-8" id="login-container">
                     <div class="card border-mao " >
                       <div class="card-header">Register</div>
                       <div class="card-body text-primary">
                         <h5 class="card-title">Student infos</h5>
                         <form action="" method="POST">
                             {% csrf_token %}
-                            {{ form }}
+                            {% for field in form %}
+                                <h6 class="card-title">{{field.label}}</h6>
+                                {{field}}
+                                <br>
+                                <hr>
 
-                            <input class='btn btn-info' type="submit" name="submit">
+                            {% endfor %}
+
+                            <input class='btn btn-info' type="submit" name="Create User">
                         </form>
                           <hr>
                           <h5 class="card-title">Register please</h5>

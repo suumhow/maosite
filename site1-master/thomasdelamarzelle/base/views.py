@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
 from .models import *
-from .forms import ProductForm
+from .forms import ProductForm, CreateUserForm
 from django.forms import inlineformset_factory
 from .filters import ProductFilter
 from django.contrib.auth.forms import UserCreationForm
@@ -38,10 +38,17 @@ def login(request):
 
 
 def register(request):
-    form = UserCreationForm()
+    form = CreateUserForm()
+
+
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
     context = {'form': form}
 
-    return render(request, 'login.html', context)
+    return render(request, 'register.html', context)
 
 def store(request):
     products = Product.objects.all()
