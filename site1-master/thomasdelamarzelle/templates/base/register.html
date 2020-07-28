@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+                <div class="col-sm-12">
+                    <div class="card border-mao " >
+                      <div class="card-header">Register</div>
+                      <div class="card-body text-primary">
+                        <h5 class="card-title">Student infos</h5>
+                        <p class="card-text">
+                            {{student.name}}, {{student.phone}}, {{student.email}}, {{student.gender}}, {{student.date_created}}
+
+                        </p>
+                          <hr>
+                          <h5 class="card-title">Title</h5>
+                        <p class="card-text">
+
+                        </p>
+                      </div>
+                    </div>
+                </div>
+
+</div>
+{% endblock %}

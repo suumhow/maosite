@@ -10,6 +10,9 @@ class Index(TemplateView):
 class Base(TemplateView):
     template_name = "base.html"
 
+class Register(TemplateView):
+    template_name = "register.html"
+
 class Store(TemplateView):
 
     template_name = "store.html"

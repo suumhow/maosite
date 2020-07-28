@@ -49,9 +49,5 @@ opacity:1!important;
 }
 .navcustom {
 padding-top:5px;
-background: linear-gradient(0deg, hsla(255, 50%, 94%, 0.9) 0%, hsla(110, 92%, 95%, 1) 100%)!important;
-        background-repeat: no-repeat;
-        background-size: 100% 100%;
-        background-size: cover;
-        background-attachment: fixed;
+
 }
