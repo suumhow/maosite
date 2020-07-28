@@ -21,7 +21,8 @@ from . import views
 urlpatterns = [
 
     path('', views.Index.as_view(), name='index'),
-    path('register', views.Register.as_view(), name='register'),
+    path('register', views.register, name='register'),
+    path('login', views.register, name='login'),
     path('base', views.Base.as_view(), name='base'),
     path('store', views.store, name='store'),
     path('student/<str:pk_test>/', views.student, name='student'),

@@ -20,7 +20,7 @@ STATUS = (
 class Student(models.Model):
     name = models.CharField(max_length=240, null=True)
     phone = models.CharField(max_length=60, null=True)
-    email = models.EmailField(max_length=120, null=True)
+    email = models.EmailField(max_length=120,unique=True, null=True)
     gender = models.CharField(max_length=10, null=True, choices=GENDER)
     date_created = models.DateField(auto_now_add=True, null=True)
 
