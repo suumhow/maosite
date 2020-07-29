@@ -42,9 +42,14 @@ def loginpage(request):
         if user is not None:
             login(request, user)
             return redirect('mydashboard')
+        else:
+            messages.info(request, 'Username Or password is incorrect')
     context = {}
 
     return render(request, 'login.html', context)
+
+def logoutpage(request):
+    return render(request, 'index.html')
 
 
 def register(request):
@@ -64,7 +69,7 @@ def register(request):
 
 def mydashboard(request):
     context = {}
-    return render(request, 'mydashboard', context)
+    return render(request, 'mydashboard.html', context)
 
 def store(request):
     products = Product.objects.all()
