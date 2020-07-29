@@ -13,11 +13,19 @@
                     <a class="nav-link" href="{% url 'store' %}">Store</a>
                   </li>
                   <li class="nav-item">
+                    <a class="nav-link" href="{% url 'mydashboard' %}">My Dashboard</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'account_settings' %}">Account settings</a>
+                  </li>
+                  <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">Logout</a>
                   </li>
 
                 </ul>
               </div>
+                <span>Hello, {{request.user.first_name}} {{request.user.last_name}}</span>
+
             </nav>
 
 

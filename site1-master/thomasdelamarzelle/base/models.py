@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 # Choices
 GENDER = (
     ('Male', 'Male'),
@@ -18,14 +19,15 @@ STATUS = (
 # Create your models here.
 
 class Student(models.Model):
-    name = models.CharField(max_length=240, null=True)
+    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
+    name = phone = models.CharField(max_length=60, null=True)
     phone = models.CharField(max_length=60, null=True)
-    email = models.EmailField(max_length=120,unique=True, null=True)
+    profile_pic = models.ImageField(null=True, blank=True)
     gender = models.CharField(max_length=10, null=True, choices=GENDER)
     date_created = models.DateField(auto_now_add=True, null=True)
 
     def __str__(self):
-        return self.name
+        return self.user.name
 
 class Tags(models.Model):
     name = models.CharField(max_length=240, null=True)

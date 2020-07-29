@@ -2,19 +2,19 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
 from .models import *
-from .forms import ProductForm, CreateUserForm
+from .forms import ProductForm, CreateUserForm , StudentForm
 from django.forms import inlineformset_factory
 from .filters import ProductFilter
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from .decorators import unauthenticated_user, authenticated_user
 
 
 class Index(TemplateView):
     template_name = "index.html"
 
-class Base(TemplateView):
-    template_name = "base.html"
 
 class Store(TemplateView):
 
@@ -31,6 +31,7 @@ def product(request):
             return redirect('store')
     return render(request, 'store.html', context)
 
+@unauthenticated_user
 def loginpage(request):
 
     if request.method == 'POST':
@@ -49,27 +50,37 @@ def loginpage(request):
     return render(request, 'login.html', context)
 
 def logoutpage(request):
-    return render(request, 'index.html')
+    logout(request)
+    return redirect('index')
 
 
 def register(request):
     form = CreateUserForm()
+    form_extended = StudentForm()
 
 
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
+        form_extended = StudentForm(request.POST)
         if form.is_valid():
             form.save()
+            form_extended.save()
             user = form.cleaned_data.get('username')
             messages.success(request, 'Account was created for ' + user)
             return redirect('login')
-    context = {'form': form}
+    context = {'form': form, 'form_extended': form_extended}
 
     return render(request, 'register.html', context)
 
+@authenticated_user
 def mydashboard(request):
     context = {}
     return render(request, 'mydashboard.html', context)
+
+@authenticated_user
+def account_settings(request):
+    context = {}
+    return render(request, 'account_settings.html', context)
 
 def store(request):
     products = Product.objects.all()

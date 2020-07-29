@@ -1,0 +1,23 @@
+{% extends 'baselogged.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row" id="register-container">
+                <div class="col-sm-8" >
+                    <div class="card border-mao " >
+                      <div class="card-header">Account settings</div>
+
+                    </div>
+                </div>
+                <div class="col-sm-2" >
+                    <div class="card border-mao " >
+                      <div class="card-header">Account settings</div>
+                        <div class="card-body text-primary">
+                            <img src="{{request.user.student.profile_pic.url}}" class="profile-pic">
+                        </div>
+
+                    </div>
+                </div>
+
+</div>
+{% endblock %}
