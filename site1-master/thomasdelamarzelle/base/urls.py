@@ -21,8 +21,9 @@ from . import views
 urlpatterns = [
 
     path('', views.Index.as_view(), name='index'),
+    path('mydashboard', views.mydashboard, name='mydashboard'),
     path('register', views.register, name='register'),
-    path('login', views.login, name='login'),
+    path('login', views.loginpage, name='login'),
     path('base', views.Base.as_view(), name='base'),
     path('store', views.store, name='store'),
     path('student/<str:pk_test>/', views.student, name='student'),

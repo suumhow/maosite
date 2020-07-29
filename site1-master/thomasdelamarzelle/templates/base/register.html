@@ -20,8 +20,10 @@
 
                             <input class='btn btn-info' type="submit" name="Create User">
                         </form>
+                          {{form.errors}}
                           <hr>
-                          <h5 class="card-title">Register please</h5>
+                          <h5 class="card-title">Already have an account?
+                              <a href="{% url 'login' %}" class="ml-2">Login</a> </h5></h5>
                         <p class="card-text">
 
                         </p>

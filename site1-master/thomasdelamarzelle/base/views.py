@@ -6,6 +6,8 @@ from .forms import ProductForm, CreateUserForm
 from django.forms import inlineformset_factory
 from .filters import ProductFilter
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 
 
 class Index(TemplateView):
@@ -29,10 +31,18 @@ def product(request):
             return redirect('store')
     return render(request, 'store.html', context)
 
-def login(request):
+def loginpage(request):
 
-    form = UserCreationForm()
-    context = {'form': form}
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('mydashboard')
+    context = {}
 
     return render(request, 'login.html', context)
 
@@ -45,10 +55,16 @@ def register(request):
         form = CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
+            user = form.cleaned_data.get('username')
+            messages.success(request, 'Account was created for ' + user)
             return redirect('login')
     context = {'form': form}
 
     return render(request, 'register.html', context)
+
+def mydashboard(request):
+    context = {}
+    return render(request, 'mydashboard', context)
 
 def store(request):
     products = Product.objects.all()

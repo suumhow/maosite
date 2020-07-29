@@ -10,12 +10,16 @@
                         <h5 class="card-title">Student infos</h5>
                         <form action="" method="POST">
                             {% csrf_token %}
-                            {{ form }}
+                            <input type="text" name="username" placeholder="Username..." class="form-control">
+                            <input type="password" name="password" placeholder="Password..." class="form-control" >
 
-                            <input class='btn btn-info' type="submit" name="submit">
+                            <input class='btn btn-info' type="submit" name="Login">
                         </form>
                           <hr>
-                          <h5 class="card-title">Login please</h5>
+                          {% for message in messages %}
+                            <p>{{message}}</p>
+                          {% endfor %}
+                          <h5 class="card-title">Don't have an account ? <a href="{% url 'register' %}" class="ml-2">Sign up</a> </h5>
                         <p class="card-text">
 
                         </p>
