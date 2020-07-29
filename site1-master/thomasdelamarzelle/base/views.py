@@ -53,22 +53,24 @@ def logoutpage(request):
     logout(request)
     return redirect('index')
 
-
+@unauthenticated_user
 def register(request):
     form = CreateUserForm()
-    form_extended = StudentForm()
-
 
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
-        form_extended = StudentForm(request.POST)
+        #form_extended = StudentForm(request.POST)
         if form.is_valid():
-            form.save()
-            form_extended.save()
-            user = form.cleaned_data.get('username')
-            messages.success(request, 'Account was created for ' + user)
+            user = form.save()
+            username = form.cleaned_data.get('username')
+            '''first_name = form.cleaned_data.get('first_name')
+            last_name = form.cleaned_data.get('last_name')
+            Student.objects.create(
+                user=user,name=first_name + ' ' + last_name ,
+            )'''
+            messages.success(request, 'Account was created for ' + username)
             return redirect('login')
-    context = {'form': form, 'form_extended': form_extended}
+    context = {'form': form}
 
     return render(request, 'register.html', context)
 
@@ -79,7 +81,16 @@ def mydashboard(request):
 
 @authenticated_user
 def account_settings(request):
-    context = {}
+    student_pro = request.user.student
+    form = StudentForm(instance=student_pro)
+    if request == 'POST':
+        form = StudentForm(request.POST,request.FILES,  instance=student_pro)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Account was updated')
+            return redirect('account_settings.html')
+    context = {'form': form}
+
     return render(request, 'account_settings.html', context)
 
 def store(request):

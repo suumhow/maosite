@@ -6,14 +6,27 @@
                 <div class="col-sm-8" >
                     <div class="card border-mao " >
                       <div class="card-header">Account settings</div>
+                        <div class="card-body text-primary">
+                            <form method="POST" action="" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+
+                                <input class="btn btn-primary" type="submit" name="Update Information">
+                            </form>
+                            {% for message in messages %}
+                            <p>{{message}}</p>
+                          {% endfor %}
+                        </div>
 
                     </div>
                 </div>
-                <div class="col-sm-2" >
+                <div class="col-sm-4" >
                     <div class="card border-mao " >
                       <div class="card-header">Account settings</div>
                         <div class="card-body text-primary">
-                            <img src="{{request.user.student.profile_pic.url}}" class="profile-pic">
+                            <a class="btn btn-warning" href="{% url 'mydashboard' %}"> &#8592; Back to Profile</a>
+                            <hr>
+                            <img class="img-fluid content-center clair" src="{{request.user.student.profile_pic.url}}" >
                         </div>
 
                     </div>

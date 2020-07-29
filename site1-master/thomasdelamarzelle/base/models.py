@@ -20,14 +20,14 @@ STATUS = (
 
 class Student(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
-    name = phone = models.CharField(max_length=60, null=True)
+    name = models.CharField(max_length=60, null=True)
     phone = models.CharField(max_length=60, null=True)
-    profile_pic = models.ImageField(null=True, blank=True)
+    profile_pic = models.ImageField(default='base/media/logo.jpg', null=True, blank=True,)
     gender = models.CharField(max_length=10, null=True, choices=GENDER)
     date_created = models.DateField(auto_now_add=True, null=True)
 
     def __str__(self):
-        return self.user.name
+        return self.name
 
 class Tags(models.Model):
     name = models.CharField(max_length=240, null=True)
