@@ -83,12 +83,12 @@ def mydashboard(request):
 def account_settings(request):
     student_pro = request.user.student
     form = StudentForm(instance=student_pro)
-    if request == 'POST':
+    if request.method == 'POST':
         form = StudentForm(request.POST,request.FILES,  instance=student_pro)
         if form.is_valid():
             form.save()
             messages.success(request, 'Account was updated')
-            return redirect('account_settings.html')
+            return redirect('account_settings')
     context = {'form': form}
 
     return render(request, 'account_settings.html', context)
