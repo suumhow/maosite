@@ -12,8 +12,17 @@ from django.contrib.auth.decorators import login_required
 from .decorators import unauthenticated_user, authenticated_user
 
 
+
+
+
 class Index(TemplateView):
     template_name = "index.html"
+
+def index(request):
+    user_auth = request.user.is_authenticated
+    context = {'user_auth': user_auth}
+
+    return render(request, 'index.html', context)
 
 
 class Store(TemplateView):
@@ -21,8 +30,9 @@ class Store(TemplateView):
     template_name = "store.html"
 
 def product(request):
+    user_auth = request.user.is_authenticated
     form = ProductForm()
-    context = {'form': form}
+    context = {'form': form, 'user_auth' : user_auth}
     if request.method == 'POST' :
         print('Printing post:', request.POST)
         form = ProductForm(request.POST)
@@ -33,6 +43,7 @@ def product(request):
 
 @unauthenticated_user
 def loginpage(request):
+    user_auth = request.user.is_authenticated
 
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -45,7 +56,7 @@ def loginpage(request):
             return redirect('mydashboard')
         else:
             messages.info(request, 'Username Or password is incorrect')
-    context = {}
+    context = {'user_auth' : user_auth}
 
     return render(request, 'login.html', context)
 
@@ -55,6 +66,7 @@ def logoutpage(request):
 
 @unauthenticated_user
 def register(request):
+    user_auth = request.user.is_authenticated
     form = CreateUserForm()
 
     if request.method == 'POST':
@@ -70,17 +82,19 @@ def register(request):
             )'''
             messages.success(request, 'Account was created for ' + username)
             return redirect('login')
-    context = {'form': form}
+    context = {'form': form, 'user_auth' : user_auth}
 
     return render(request, 'register.html', context)
 
 @authenticated_user
 def mydashboard(request):
-    context = {}
+    user_auth = request.user.is_authenticated
+    context = {'user_auth' : user_auth}
     return render(request, 'mydashboard.html', context)
 
 @authenticated_user
 def account_settings(request):
+    user_auth = request.user.is_authenticated
     student_pro = request.user.student
     form = StudentForm(instance=student_pro)
     if request.method == 'POST':
@@ -89,38 +103,43 @@ def account_settings(request):
             form.save()
             messages.success(request, 'Account was updated')
             return redirect('account_settings')
-    context = {'form': form}
+    context = {'form': form, 'user_auth' : user_auth}
 
     return render(request, 'account_settings.html', context)
 
 def store(request):
+    user_auth = request.user.is_authenticated
     products = Product.objects.all()
     total_products = products.count()
     total_products_sample_pack = products.filter(category='Sample Pack').count()
 
     myFilter = ProductFilter(request.GET, queryset=products)
     products = myFilter.qs
-    context = {'products': products, 'total_products':total_products,'total_products_sample_pack': total_products_sample_pack, 'myFilter': myFilter}
+    context = {'user_auth' : user_auth, 'products': products, 'total_products':total_products,'total_products_sample_pack': total_products_sample_pack, 'myFilter': myFilter}
     return render(request, 'store.html', context)
 
 def checkout(request):
-    context = {}
+    user_auth = request.user.is_authenticated
+    context = {'user_auth' : user_auth}
     return render(request, 'checkout.html', context)
 
 def student(request, pk_test):
+    user_auth = request.user.is_authenticated
     student = Student.objects.get(id=pk_test)
     orders = student.order_set.all()
     total_orders = orders.count()
-    context = {'student': student, 'orders': orders, 'total_orders': total_orders}
+    context = {'student': student, 'orders': orders, 'total_orders': total_orders, 'user_auth' : user_auth}
     return render(request, 'student.html', context)
 
 def cart(request):
-    if request.user.is_authenticated:
+    user_auth = request.user.is_authenticated
+    if user_auth:
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
         items = order.orderitem_set.all()
     else:
         items = []
 
-    context = {'items' : items}
+
+    context = {'items' : items, 'user_auth' : user_auth}
     return render(request, 'cart.html', context)

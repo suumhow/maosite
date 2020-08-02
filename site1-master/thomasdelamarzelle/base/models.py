@@ -20,7 +20,7 @@ STATUS = (
 
 class Student(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
-    name = models.CharField(max_length=60, null=True)
+    name = models.CharField(max_length=60,default='placeholder', null=False)
     phone = models.CharField(max_length=60, null=True)
     profile_pic = models.ImageField(default='base/media/logo.jpg', null=True, blank=True,)
     gender = models.CharField(max_length=10, null=True, choices=GENDER)
@@ -78,14 +78,28 @@ class Order(models.Model):
     def __str__(self):
         return str(self.transaction_id)
 
-class OrderItem(models.Model):
-    product = models.ForeignKey(Product, null=True, on_delete=models.SET_NULL)
-    order = models.ForeignKey(Order, null=True, on_delete=models.SET_NULL)
-    quantity = models.IntegerField(default=0, blank=True)
-    date_added = models.DateField(auto_now_add=True, null=True)
+    @property
+    def get_cart_total(self):
+        orderitems = self.orderitem_set.all()
+        total = sum([item.get_total() for item in orderitems])
+        return total
 
-    def __str__(self):
-        return self.product.name
+    def get_cart_items(self):
+        orderitems = self.orderitem_set.all()
+        quantity = sum([item.quantity for item in orderitems])
+
+class OrderItem(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
+    quantity = models.IntegerField(default=0, null=True, blank=True )
+    date_added = models.DateTimeField(auto_now_add=True, null=True)
+
+    @property
+    def get_total(self):
+        total = self.quantity * self.product.price
+        return total
+
+
 
 class ShippingAddress(models.Model):
     customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL)
@@ -103,7 +117,3 @@ class ShippingAddress(models.Model):
 
 
 
-
-
-'''class Goals(models.Model):
-    name'''

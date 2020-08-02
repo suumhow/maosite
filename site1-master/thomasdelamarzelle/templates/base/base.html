@@ -15,7 +15,11 @@
   <body>
     <div class="container " >
         <!-- header navbar -->
+        {% if user_auth %}
+        {% include 'navbarlogged.html' %}
+        {% else %}
         {% include 'navbar.html' %}
+        {% endif %}
 
         <!-- Main content -->
         <div class=" main " >
