@@ -3,33 +3,26 @@
 
 {% block content %}
 <div class="row">
-                <div class="col-sm-8 h-100">
-                    <div class="card border-mao " >
-                      <div class="card-header">Store</div>
+                <div class="col-sm-8 h-100 ">
+                    {% for product in products %}
+                    <div  class="card border-mao col-sm-12 margin-bot shadow"  >
+                      <div class="card-header">{{product.name}}</div>
                       <div class="card-body text-primary">
-                        <h5 class="card-title">{{total_products}} Products 2commit</h5>
-                        <p class="card-text">Wonderful produts!
+                          <img class="img-fluid content-center clair h-128 w-auto shadow" src="{{product.imageURL}}" >
 
-
-                        </p>
+                          <p class="card-text">{{product.description}}</p>
                           <hr>
-                          <h5 class="card-title">Products</h5>
-                        <p class="card-text">
-                            {% for i in products %}
-                                <h6 class="card-title">{{i}}</h6>
-                                <br>
-                            {{i.description}}
-                                <br>
-                                <button class="btn btn-primary" type="submit">Purchase for {{i.price}} euros</button>
-                                <hr>
+                          <button class="btn btn-outline-secondary add-btn">Add to Cart</button>
+                          <h4 style="display: inline-block; float: left;margin-right:15px;"><strong>  ${{product.price}}</strong></h4>
 
-                            {% endfor %}
-                        </p>
+
+
                       </div>
                     </div>
+                    {% endfor %}
                 </div>
-                <div class="col-sm-4">
-                    <div class="card border-primary " >
+                <div  class="col-sm-4 margin-bot ">
+                    <div class="card border-mao shadow" >
                       <div class="card-header">Search</div>
                       <div class="card-body text-primary">
                         <h5 class="card-title">Search products</h5>
@@ -46,7 +39,7 @@
                           </form>
 
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                          <img src="{% static 'base/media/logo.jpg'%}" class="img-fluid content-center h-64 w-auto" alt="Responsive image">
+                          <img src="{% static 'base/media/logo.jpg'%}" class="img-fluid content-center  w-auto" alt="Responsive image">
                       </div>
                     </div>
                 </div>

@@ -103,9 +103,24 @@ def store(request):
     context = {'products': products, 'total_products':total_products,'total_products_sample_pack': total_products_sample_pack, 'myFilter': myFilter}
     return render(request, 'store.html', context)
 
+def checkout(request):
+    context = {}
+    return render(request, 'checkout.html', context)
+
 def student(request, pk_test):
     student = Student.objects.get(id=pk_test)
     orders = student.order_set.all()
     total_orders = orders.count()
     context = {'student': student, 'orders': orders, 'total_orders': total_orders}
     return render(request, 'student.html', context)
+
+def cart(request):
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        items = order.orderitem_set.all()
+    else:
+        items = []
+
+    context = {'items' : items}
+    return render(request, 'cart.html', context)

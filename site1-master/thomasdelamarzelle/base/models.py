@@ -41,18 +41,68 @@ class Product(models.Model):
     category = models.CharField(max_length=240, null=True, choices=CATEGORY)
     description = models.CharField(max_length=240, null=True)
     tags = models.ManyToManyField(Tags)
+    profile_pic = models.ImageField(default='base/media/logo.jpg', null=True, blank=True, )
     def __str__(self):
         return self.name
+    @property
+    def imageURL(self):
+        try:
+            url = self.profile_pic.url
+        except:
+            url = ''
+        return url
 
 
 
+
+
+class Customer(models.Model):
+    user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=64, null=True)
+    last_name = models.CharField(max_length=64, null=True)
+    email = models.EmailField()
+
+
+
+    def __str__(self):
+        representation = str(self.first_name) + str(self.last_name)
+        return representation
 
 class Order(models.Model):
 
-    student = models.ForeignKey(Student, null=True, on_delete=models.SET_NULL)
+    customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL)
+    transaction_id = models.CharField(max_length=100,blank=True, )
+    complete = models.BooleanField(default=False, null=True, blank=True)
+    date_ordered = models.DateField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return str(self.transaction_id)
+
+class OrderItem(models.Model):
     product = models.ForeignKey(Product, null=True, on_delete=models.SET_NULL)
-    status = models.CharField(max_length=240, null=True, choices=STATUS)
-    date_created = models.DateField(auto_now_add=True, null=True)
+    order = models.ForeignKey(Order, null=True, on_delete=models.SET_NULL)
+    quantity = models.IntegerField(default=0, blank=True)
+    date_added = models.DateField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return self.product.name
+
+class ShippingAddress(models.Model):
+    customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL)
+    order = models.ForeignKey(Order, null=True, on_delete=models.SET_NULL)
+    address = models.CharField(max_length=200, null=False)
+    city = models.CharField(max_length=200, null=False)
+    zipcode = models.CharField(max_length=200, null=False)
+    date_added = models.DateField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return self.address
+
+
+
+
+
+
 
 
 '''class Goals(models.Model):
