@@ -2,7 +2,49 @@
 {% load static %}
 
 {% block content %}
-<div class="row" id="register-container">
+
+<div class="row" >
+                <div class="col-sm-12 " >
+                    <div class="card border-mao " >
+
+
+                      <div class="card-body text-primary">
+                          <div class="box-element">
+                              <a class="btn btn-outline-dark" href="{% url 'store' %}">Continue Shipping</a>
+                              <br>
+                              <br>
+
+                              <table class="table" >
+                                  <tr>
+                                      <th><h5>Items: <strong>{{order.get_cart_items}}</strong></h5></th>
+                                      <th><h5>Total: <strong>${{order.get_cart_total}}</strong></h5></th>
+                                      <th>
+                                          <a style="float:right;margin:5px" class="btn btn-success" href="{% url 'checkout' %}">Checkout</a>
+
+                                      </th>
+
+
+
+                                  </tr>
+
+
+                              </table>
+
+
+                          </div>
+
+
+
+                      </div>
+                    </div>
+                </div>
+
+</div>
+
+
+
+
+<div class="row" >
                 <div class="col-sm-12 " id="login-container">
                     <div class="card border-mao " >
 
@@ -26,11 +68,11 @@
                               <div style="flex:1">
                                   <div class="quantity">x{{item.quantity}}
 
-                                      <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-bar-up" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                      <svg data-product="{{item.product.id}}" data-action="add" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-bar-up update-cart" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
   <path fill-rule="evenodd" d="M11.354 5.854a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L8 3.207l2.646 2.647a.5.5 0 0 0 .708 0z"/>
   <path fill-rule="evenodd" d="M8 10a.5.5 0 0 0 .5-.5V3a.5.5 0 0 0-1 0v6.5a.5.5 0 0 0 .5.5zm-4.8 1.6c0-.22.18-.4.4-.4h8.8a.4.4 0 0 1 0 .8H3.6a.4.4 0 0 1-.4-.4z"/>
 </svg>
-                                      <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-bar-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                      <svg data-product="{{item.product.id}}" data-action="remove" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-bar-down update-cart" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
   <path fill-rule="evenodd" d="M11.354 10.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 .708-.708L8 12.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
   <path fill-rule="evenodd" d="M8 6a.5.5 0 0 1 .5.5V13a.5.5 0 0 1-1 0V6.5A.5.5 0 0 1 8 6zM2 3.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
 </svg>
@@ -38,12 +80,15 @@
                               </div>
                               <div style="flex:1"><p>${{item.get_total}}</p></div>
                           </div>
-                          </div>
-                          {% empty %}
+                              {% empty %}
                           <p>Chat is empty!</p>
-                          {% endfor %}
+                              s{% endfor %}
+                          </div>
+
                       </div>
+
                     </div>
+
                 </div>
 
 </div>

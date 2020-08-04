@@ -100,3 +100,6 @@ height: 128px;
     border-bottom: 1px solid #ececec;
 
 }
+.hidden{
+    display: none!important;
+}

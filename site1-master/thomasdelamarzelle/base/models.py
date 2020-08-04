@@ -42,6 +42,7 @@ class Product(models.Model):
     description = models.CharField(max_length=240, null=True)
     tags = models.ManyToManyField(Tags)
     profile_pic = models.ImageField(default='base/media/logo.jpg', null=True, blank=True, )
+    digital = models.BooleanField(default=True, null=True, blank=False)
     def __str__(self):
         return self.name
     @property
@@ -76,17 +77,26 @@ class Order(models.Model):
     date_ordered = models.DateField(auto_now_add=True, null=True)
 
     def __str__(self):
-        return str(self.transaction_id)
+        return str(self.transaction_id) + str(self.customer) + str(self.date_ordered)
 
     @property
     def get_cart_total(self):
         orderitems = self.orderitem_set.all()
-        total = sum([item.get_total() for item in orderitems])
+        total = sum([item.get_total for item in orderitems])
         return total
-
+    @property
     def get_cart_items(self):
         orderitems = self.orderitem_set.all()
-        quantity = sum([item.quantity for item in orderitems])
+        total = sum([item.quantity for item in orderitems])
+        return total
+    @property
+    def shipping(self):
+        shipping = False
+        orderitems = self.orderitem_set.all()
+        for item in orderitems:
+            if item.product.digital== False:
+                shipping=True
+        return shipping
 
 class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
@@ -106,7 +116,7 @@ class ShippingAddress(models.Model):
     order = models.ForeignKey(Order, null=True, on_delete=models.SET_NULL)
     address = models.CharField(max_length=200, null=False)
     city = models.CharField(max_length=200, null=False)
-    zipcode = models.CharField(max_length=200, null=False)
+    ziploc = models.CharField(max_length=200, null=False)
     date_added = models.DateField(auto_now_add=True, null=True)
 
     def __str__(self):

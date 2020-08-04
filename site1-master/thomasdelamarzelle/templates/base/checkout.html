@@ -2,36 +2,195 @@
 {% load static %}
 
 {% block content %}
-<div class="row" id="register-container">
-                <div class="col-sm-4 " id="login-container">
+
+<div class="row" >
+                <div class="col-sm-6 " >
                     <div class="card border-mao " >
-                      <div class="card-header">Login</div>
+                        <div class="card-body text-primary">
+                          <div class="box-element">
+                              <a class="btn btn-outline-dark" href="{% url 'store' %}">Contine Shipping</a>
+                              <a class="btn btn-outline-dark" href="{% url 'cart' %}">Back to Cart</a>
+                              <br>
+                              <br>
+                              <table class="table" >
+                                  <tr>
+                                      <th><h5>Items: <strong>{{order.get_cart_items}}</strong></h5></th>
+                                      <th><h5>Total: <strong>${{order.get_cart_total}}</strong></h5></th>
+                                      <th>
+                                          <a style="float:right;margin:5px" class="btn btn-success" href="{% url 'checkout' %}">Checkout</a>
+
+                                      </th>
+                                  </tr>
+                              </table>
+                          </div>
+                      </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 " >
+                    <div class="card border-mao " >
+                        <div class="card-body text-primary">
+                          <div id="form-wrapper" class="box-element">to fill
+                              <form id="form">
+                                  <div id="user-info">
+                                      <div class="form-field">
+                                          <input required class="form-control" type="text" name="name" placeholder="Name...">
+                                      </div>
+                                      <div class="form-field">
+                                          <input required class="form-control" type="email" name="email" placeholder="Email..">
+                                      </div>
+
+
+                                  </div>
+
+                                  <div id="shipping-info" class="box-element "><p>Shipping Infos</p>
+                                      <div class="form-field">
+                                          <input required class="form-control" type="text" name="address" placeholder="address...">
+                                      </div>
+                                      <div class="form-field">
+                                          <input required class="form-control" type="text" name="city" placeholder="city...">
+                                      </div>
+                                      <div class="form-field">
+                                          <input required class="form-control" type="text" name="ziploc" placeholder="zipcode...">
+                                      </div>
+                                      <div class="form-field">
+                                          <input required class="form-control" type="text" name="country" placeholder="Country...">
+                                      </div>
+
+
+                                  </div>
+                                  <hr>
+                                  <input id="form-button" class="btn btn-success btn-block" type="submit" value="Continue">
+                              </form>
+                          </div>
+                          <br>
+                            <div class="box-element hidden" id="payment-info">
+                                <strong>Paypal Option</strong>
+                                <button id="make-payment" class="btn btn-warning btn-block">Make Payment</button>
+
+                            </div>
+                      </div>
+                    </div>
+                </div>
+</div>
+
+<div class="row" >
+                <div class="col-sm-12 " id="login-container">
+                    <div class="card border-mao " >
+
+                      <div class="card-header">cart</div>
                       <div class="card-body text-primary">
-                        <h5 class="card-title">Student infos</h5>
-                        <form action="" method="POST">
-                            {% csrf_token %}
-                            <input type="text" name="username" placeholder="Username..." class="form-control">
-                            <input type="password" name="password" placeholder="Password..." class="form-control" >
+                          <div class="box-element">
+                        <h5 class="card-title">Your orders</h5>
+                              <hr>
+                            <div class="cart-row">
+                                <div style="flex:2"></div>
+                                <div style="flex:2"><strong>Item</strong></div>
+                                <div style="flex:1"><strong>Price</strong></div>
+                                <div style="flex:1"><strong>Quantity</strong></div>
+                                <div style="flex:1"><strong>Total</strong></div>
+                            </div>
+                         {% for item in items %}
+                          <div class="cart-row">
+                              <div style="flex:2"><img class="img-fluid content-center clair h-128 w-auto shadow" src="{{item.product.imageURL}}"></div>
+                              <div style="flex:2"><p>{{item.product.name}}</p></div>
+                              <div style="flex:1"><p>{{item.product.price}}</p></div>
+                              <div style="flex:1">
+                                  <div class="quantity">x{{item.quantity}}
 
-                            <input class='btn btn-info' type="submit" name="Login">
-                        </form>
-                          <hr>
-                          <p>Forgotten your password? Enter your email address below,
-                              and we'll email instructions for setting a new one.
-                          </p>
-                          <a class="btn btn-warning " href="{% url 'reset_password' %}"  aria-disabled="true">Reset your Password</a
-
-                          <hr>
-                          {% for message in messages %}
-                            <p>{{message}}</p>
+                                      <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-bar-up" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M11.354 5.854a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L8 3.207l2.646 2.647a.5.5 0 0 0 .708 0z"/>
+  <path fill-rule="evenodd" d="M8 10a.5.5 0 0 0 .5-.5V3a.5.5 0 0 0-1 0v6.5a.5.5 0 0 0 .5.5zm-4.8 1.6c0-.22.18-.4.4-.4h8.8a.4.4 0 0 1 0 .8H3.6a.4.4 0 0 1-.4-.4z"/>
+</svg>
+                                      <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-bar-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M11.354 10.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 .708-.708L8 12.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+  <path fill-rule="evenodd" d="M8 6a.5.5 0 0 1 .5.5V13a.5.5 0 0 1-1 0V6.5A.5.5 0 0 1 8 6zM2 3.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
+</svg>
+                                  </div>
+                              </div>
+                              <div style="flex:1"><p>${{item.get_total}}</p></div>
+                          </div>
+                          </div>
+                          {% empty %}
+                          <p>Chat is empty!</p>
                           {% endfor %}
-                          <h5 class="card-title">Don't have an account ? <a href="{% url 'register' %}" class="ml-2">Sign up</a> </h5>
-                        <p class="card-text">
-
-                        </p>
                       </div>
                     </div>
                 </div>
 
 </div>
+<script type="text/javascript">
+    var shipping = '{{order.shipping}}'
+    var total = '{{order.get_cart_total}}'
+
+
+    if (shipping == 'False' ){
+        document.getElementById('shipping-info').innerHTML = ''
+        console.log('shipping is False')
+        }
+    else{
+    console.log('shipping is True')}
+
+    if (user != 'AnonymousUser'){
+        document.getElementById('user-info').innerHTML = ''
+        }
+
+    if (shipping == 'False' && user != 'AnonymousUser'){
+        document.getElementById('form-wrapper').classList.add('hidden');
+        document.getElementById('payment-info').classList.remove('hidden');
+        }
+
+    var form = document.getElementById('form')
+    form.addEventListener('submit', function(e){
+        e.preventDefault()
+        console.log('Form submited...')
+        document.getElementById('form-button').classList.add('hidden')
+        document.getElementById('payment-info').classList.remove('hidden')
+        })
+
+    document.getElementById('make-payment').addEventListener('click', function(e){
+        submitFormData()
+     })
+
+    function submitFormData(){
+        console.log('Payment Button clicked')
+        var userFormData = {
+            'name':null,
+            'email':null,
+            'total':total,
+        }
+        var shippingInfo = {
+            'address':null,
+            'city':null,
+            'ziploc':null,
+        }
+        if(shipping != 'False'){
+            shippingInfo.address = form.address.value
+            shippingInfo.city = form.city.value
+            shippingInfo.ziploc = form.ziploc.value
+            shippingInfo.country = form.country.value
+            }
+        if(user == 'AnonymousUser'){
+            userFormData.name = form.name.value
+            userFormData.email = form.email.value
+        }
+
+        var url = '/process_order/'
+        fetch(url,{
+            method:'POST' ,
+            headers:{
+                'Content-Type' : 'application/json' ,
+                'X-CSRFToken': csrftoken,
+            },
+            body:JSON.stringify({'form':userFormData, 'shipping': shippingInfo})
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log('Success:', data)
+            alert('Transaction complete')
+            window.location.href = "{% url 'store' %}"
+            })
+         }
+
+
+</script>
 {% endblock %}
