@@ -13,6 +13,7 @@ from .decorators import unauthenticated_user, authenticated_user
 from django.http import JsonResponse
 import json
 import datetime
+from .utils import cookieCart, cartData, guestOrder
 
 
 cartItems = 0
@@ -47,8 +48,6 @@ def product(request):
 @unauthenticated_user
 def loginpage(request):
     user_auth = request.user.is_authenticated
-    global cartItems
-    cartItems=0
 
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -114,35 +113,6 @@ def account_settings(request):
 
     return render(request, 'account_settings.html', context)
 
-def store(request):
-    global cartItems
-    user_auth = request.user.is_authenticated
-    if user_auth:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
-        cartItems = order.get_cart_items
-    else:
-        items = []
-        order = {'get_cart_total':0, 'get_cart_items': 0, 'shipping':True}
-        cartItems = order['get_cart_items']
-
-    products = Product.objects.all()
-    total_products = products.count()
-    total_products_sample_pack = products.filter(category='Sample Pack').count()
-
-    myFilter = ProductFilter(request.GET, queryset=products)
-    products = myFilter.qs
-    context = {'user_auth' : user_auth,
-               'products': products,
-               'total_products':total_products,
-               'total_products_sample_pack': total_products_sample_pack,
-               'myFilter': myFilter,
-               'cartItems': cartItems}
-    return render(request, 'store.html', context)
-
-
-
 def student(request, pk_test):
     user_auth = request.user.is_authenticated
     student = Student.objects.get(id=pk_test)
@@ -151,36 +121,55 @@ def student(request, pk_test):
     context = {'student': student, 'orders': orders, 'total_orders': total_orders, 'user_auth' : user_auth, 'cartItems': cartItems}
     return render(request, 'student.html', context)
 
+def store(request):
+    global cartItems
+    data = cartData(request)
+
+    cartItems = data['cartItems']
+    order = data['order']
+    items = data['items']
+    user_auth = data['user_auth']
+
+
+    products = Product.objects.all()
+    total_products = products.count()
+    total_products_sample_pack = products.filter(category='Sample Pack').count()
+
+    myFilter = ProductFilter(request.GET, queryset=products)
+    products = myFilter.qs
+    context = {'user_auth': user_auth,
+               'products': products,
+               'total_products': total_products,
+               'total_products_sample_pack': total_products_sample_pack,
+               'myFilter': myFilter,
+               'cartItems': cartItems,
+               'order': order,
+               'items': items,}
+    return render(request, 'store.html', context)
+
 def cart(request):
     global cartItems
-    user_auth = request.user.is_authenticated
-    if user_auth:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
-    else:
-        items = []
-        order = {'get_cart_total': 0, 'get_cart_items': 0, 'shipping': True}
-        cartItems = order['get_cart_items']
+    data = cartData(request)
 
+    cartItems = data['cartItems']
+    order = data['order']
+    items = data['items']
+    user_auth = data['user_auth']
 
-    context = {'items' : items, 'user_auth' : user_auth, 'order': order, 'cartItems': cartItems}
+    context = {'items': items, 'user_auth': user_auth, 'order': order, 'cartItems': cartItems}
+    print(context['order'])
     return render(request, 'cart.html', context)
 
 def checkout(request):
     global cartItems
-    user_auth = request.user.is_authenticated
-    if user_auth:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
-    else:
-        items = []
-        order = {'get_cart_total': 0, 'get_cart_items': 0, 'shipping': True}
-        cartItems = order['get_cart_items']
+    data = cartData(request)
 
+    cartItems = data['cartItems']
+    order = data['order']
+    items = data['items']
+    user_auth = data['user_auth']
 
-    context = {'items' : items, 'user_auth' : user_auth, 'order': order, 'cartItems': cartItems, 'customer': customer}
+    context = {'items' : items, 'user_auth' : user_auth, 'order': order, 'cartItems': cartItems, }
 
     return render(request, 'checkout.html', context)
 
@@ -209,32 +198,32 @@ def updateItem(request):
 
 def processOrder(request):
 
-
-    
-
     transaction_id = datetime.datetime.now().timestamp()
     data = json.loads(request.body)
 
     if request.user.is_authenticated:
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        total = float(data['form']['total'])
-        order.transaction_id = transaction_id
 
-        if total == order.get_cart_total:
-            order.complete = True
-        order.save()
-        if order.shipping == True:
-            ShippingAddress.objects.create(
-                customer=customer,
-                address=data['shipping']['address'],
-                city=data['shipping']['city'],
-                ziplok=data['shipping']['ziploc'],
-                country=data['shipping']['country'],
-                )
+
 
     else:
-        print('user not logged in')
+        customer, order = guestOrder(request, data)
+    total = float(data['form']['total'])
+    order.transaction_id = transaction_id
+
+    if total == order.get_cart_total:
+        order.complete = True
+    order.save()
+    if order.shipping == True:
+        ShippingAddress.objects.create(
+            customer=customer,
+            address=data['shipping']['address'],
+            city=data['shipping']['city'],
+            ziploc=data['shipping']['ziploc'],
+            country=data['shipping']['country'],
+        )
+
     print('Data', request.body)
     return JsonResponse('Payment complete', safe=False)
 

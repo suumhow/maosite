@@ -37,7 +37,7 @@ class Tags(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=240, null=True)
-    price = models.FloatField(null=True)
+    price = models.DecimalField(max_digits=7,decimal_places=2 )
     category = models.CharField(max_length=240, null=True, choices=CATEGORY)
     description = models.CharField(max_length=240, null=True)
     tags = models.ManyToManyField(Tags)
@@ -76,6 +76,7 @@ class Order(models.Model):
     complete = models.BooleanField(default=False, null=True, blank=True)
     date_ordered = models.DateField(auto_now_add=True, null=True)
 
+
     def __str__(self):
         return str(self.transaction_id) + str(self.customer) + str(self.date_ordered)
 
@@ -98,6 +99,8 @@ class Order(models.Model):
                 shipping=True
         return shipping
 
+
+
 class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
@@ -118,6 +121,7 @@ class ShippingAddress(models.Model):
     city = models.CharField(max_length=200, null=False)
     ziploc = models.CharField(max_length=200, null=False)
     date_added = models.DateField(auto_now_add=True, null=True)
+    country = models.CharField(max_length=80, null=True, blank=True)
 
     def __str__(self):
         return self.address

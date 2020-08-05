@@ -7,7 +7,7 @@ class StudentForm(ModelForm):
     class Meta:
         model = Student
         fields = '__all__'
-        exclude = ['user',]
+        exclude = ['user', ]
 class ProductForm(ModelForm):
     class Meta:
         model = Product
@@ -16,4 +16,4 @@ class ProductForm(ModelForm):
 class CreateUserForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ['username' , 'first_name', 'last_name', 'email' , 'password1', 'password2']
+        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2', ]
